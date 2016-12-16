@@ -185,7 +185,7 @@ head(dailyActivityMean,10)
 # create merged dataset between activityData and avg / interval 
 activityData2 <- full_join(activityData, dailyActivityMean, by = "interval")
 
-# create a fixed steps column
+# create a stepsFixed column
 activityData2 <- activityData2 %>% 
   mutate(stepsFixed = ifelse(is.na(steps.x), steps.y, steps.x))
 
@@ -218,7 +218,9 @@ head(activityData2,15)
 # aggregate data again
 totalSteps2 <- aggregate(stepsFixed ~ validDate, activityData2, sum, na.action=na.omit)
 
-qplot(totalSteps2$stepsFixed, geom="histogram", bins=7, main="Histogram of Steps with Imputed Values", xlab="Steps", ylab="Frequency")
+qplot(totalSteps2$stepsFixed, geom="histogram", bins=7, 
+      main="Histogram of Steps with Imputed Values", 
+      xlab="Steps", ylab="Frequency")
 ```
 
 ![plot of chunk stepHistogramFixed](figure/stepHistogramFixed-1.png)
@@ -267,10 +269,11 @@ data.frame(tsMean, tsMeanImputed)
 ## 1 10766.19      10766.19
 ```
 
-When imputing step values by using the mean values:
+When imputing missing step values with the mean values :
 
 * The median changes a little bit
 * The mean does not change
+* The imputed mean and median are the same
 
 ## Are there differences in activity patterns between weekdays and weekends?
 1. Create a new factor variable in the dataset with two levels - `weekday` and `weekend` indicating whether a given date is a weekday or weekend day
